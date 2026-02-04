@@ -3,7 +3,7 @@ const router = express.Router();
 
 const authService = require('../../services/auth/AuthService');
 
-router.post('/register', async (req, res) => {
+router.post('/api/register', async (req, res) => {
   try {
     const user = await authService.register(req.body);
     res.status(201).json({success: 'User registered successfully',user});
@@ -13,10 +13,10 @@ router.post('/register', async (req, res) => {
 });
 
 
-router.post('/', async (req, res) => {
+router.post('/api/login', async (req, res) => {
   try {
-    const { name, password } = req.body;
-    const result = await authService.login(name, password);
+    const { name, password ,role} = req.body;
+    const result = await authService.login(name, password, role);
     res.status(201).json({success: 'Login successfully', result});
 
   } catch (err) {
