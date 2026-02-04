@@ -25,13 +25,16 @@ async function register(userData){
 } 
 
 
-async function login(name, password){
+async function login(name, password, role){
     const user = await User.findOne({ name });
     if(!name || !password){
         throw new Error('All fields are required');
     }
     if (!user) {
-        throw new Error('Invalid name');
+        throw new Error('Invalid credentials');
+    }
+     if (user.role !== role) {
+        throw new Error('Unauthorized role');
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
