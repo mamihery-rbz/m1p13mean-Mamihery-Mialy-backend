@@ -18,6 +18,6 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Eto ny routes principales
 // --> 
-
+app.use('/login', require('./routes/auth/AuthRoutes'))
 
 app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`)); 
