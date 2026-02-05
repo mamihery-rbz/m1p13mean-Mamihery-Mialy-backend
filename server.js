@@ -18,6 +18,9 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Eto ny routes principales
 // --> 
-app.use('/auth', require('./routes/auth/AuthRoutes'))
+app.use('/auth', require('./routes/auth/AuthRoutes'));
+app.use('/orders_management', require('./routes/shop/OrderManagementRoutes'));
+app.use('/stock_movement', require('./routes/shop/StockMovementRoutes'));
+
 
 app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`)); 

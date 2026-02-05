@@ -7,6 +7,11 @@ const OrderSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  shop: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Shop',
+    required: true
+  },
   dt_order: {
     type: Date,
     default: Date.now
