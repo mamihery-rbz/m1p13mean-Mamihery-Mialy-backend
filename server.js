@@ -20,6 +20,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Eto ny routes principales
 // --> 
+app.use('/auth', require('./routes/auth/AuthRoutes'))
 app.use('/admin', adminRoutes);
 app.use('/vue', vueRoutes);
 
