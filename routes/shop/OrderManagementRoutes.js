@@ -1,14 +1,35 @@
 const express = require('express');
 const router = express.Router();
-
+const Order = require('../../models/orders/Order');
 const orderManagementService = require('../../services/shop/OrderManagementService');
+const auth = require('../../middlewares/auth/authMiddleware');
+
+router.post('/orders', auth, async (req, res) => {
+  try {
+    const { user, dt_payment, total_price, shop, status } = req.body;
+
+    const order = new Order({
+      user,
+      shop,
+      dt_payment,
+      total_price,
+      status
+    });
+
+    const savedOrder = await order.save();
+
+    res.status(201).json(savedOrder);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
 
 
 // Liste de toutes les commandes
-router.get('/orders_list', async (req, res) => {
+router.get('/orders_list', auth, async (req, res) => {
     try {
-        const {userId, shopId} = req.body;
-        const orders = await orderManagementService.list_orders(userId, shopId);
+        // const {shopId} = req.body;
+        const orders = await orderManagementService.list_orders(req.user.id);
         res.json(orders);
     } catch (error) {
         res.status(400).json({ error: error.message });
@@ -19,8 +40,9 @@ router.get('/orders_list', async (req, res) => {
 // Mise a jour des status des commandes
 router.put('/update_order_status', async (req, res) => {
     try {
-        const {id, status} = req.body;  
-        const orderStatusUpdated = await orderManagementService.update_order_status(id, status);
+        const {idOrder, status, dt_payment} = req.body; 
+        console.log("Date de payement : "+dt_payment); 
+        const orderStatusUpdated = await orderManagementService.update_order_status(idOrder, status, dt_payment);
         res.json({
             message: orderStatusUpdated.message, 
             order_status_updated: orderStatusUpdated.order 

@@ -3,23 +3,23 @@ const router = express.Router();
 const Product = require('../../models/product/Product');
 const CategoryProduct = require('../../models/product/CategoryProduct');
 const shopService = require('../../services/shop/ShopServices');
-
+const auth = require('../../middlewares/auth/authMiddleware');
 
 // Avoir les produits de la boutique du gestionnaire
-router.get('/shop/products', async (req, res) => {
+router.get('/shop/products', auth, async (req, res) => {
     try {
-        const products = await shopService.get_shop_products_by_user(req.body.idUser);
+        const products = await shopService.get_shop_products_by_user(req.user.id);
         res.json(products);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ error: error.message });
     }
 });
 
 
 // Creation d'un produit d'une boutique que le gestionnaire gere 
-router.post('/shop/products', async (req, res) => {
+router.post('/shop/products', auth, async (req, res) => {
     try {
-        const shopUser = await shopService.get_shop_by_user(req.body.idUser);
+        const shopUser = await shopService.get_shop_by_user(req.user.id);
         const { name, price, shop, category_product } = req.body;
 
         const product = new Product({
@@ -81,7 +81,7 @@ router.get('/products/:id', async (req, res) => {
       .populate('category_product');
 
     if (!product) {
-      return res.status(404).json({ message: 'Produit non trouvé' });
+      return res.status(404).json({ error: 'Produit non trouvé' });
     }
 
     res.json(product);
@@ -101,7 +101,7 @@ router.put('/products/:id', async (req, res) => {
       .populate('category_product');
 
     if (!updatedProduct) {
-      return res.status(404).json({ message: 'Produit non trouvé' });
+      return res.status(404).json({ error: 'Produit non trouvé' });
     }
 
     res.json(updatedProduct);
@@ -117,7 +117,7 @@ router.delete('/products/:id', async (req, res) => {
     );
 
     if (!deletedProduct) {
-      return res.status(404).json({ message: 'Produit non trouvé' });
+      return res.status(404).json({ error: 'Produit non trouvé' });
     }
 
     res.json({ message: 'Produit supprimé avec succès' });

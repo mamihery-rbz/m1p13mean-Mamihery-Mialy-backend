@@ -23,6 +23,8 @@ app.use('/orders_management', require('./routes/shop/OrderManagementRoutes'));
 app.use('/stock_movement', require('./routes/shop/StockMovementRoutes'));
 app.use('/products_management', require('./routes/shop/ProductRoutes'));
 app.use('/stock', require('./routes/shop/StockRoutes'));
+app.use('/stat', require('./routes/shop/StatRoutes'));
+
 
 
 

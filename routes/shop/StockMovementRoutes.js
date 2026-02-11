@@ -9,7 +9,7 @@ router.get('/stock/:productId', async (req, res) => {
         const stock = await stockMovementService.get_product_stock(req.params.productId);
         res.json({ stock });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ error: error.message });
     }
 });
 
@@ -24,7 +24,7 @@ router.post('/stock/in', async (req, res) => {
             movement
         });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ error: error.message });
     }
 });
 
@@ -40,7 +40,7 @@ router.post('/stock/out', async (req, res) => {
             movement
         });
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ error: error.message });
     }
 });
 

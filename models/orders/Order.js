@@ -16,7 +16,10 @@ const OrderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  dt_payment: Date,
+  dt_payment: {
+    type: Date,
+    default: null
+  },
   total_price: { type: Number, required: true },
   status: {
     type: String,

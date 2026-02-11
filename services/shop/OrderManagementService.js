@@ -94,14 +94,24 @@ function getOrderDetailStatusMessage(status) {
 }
 
 
-async function update_order_status(orderId, status) {
+async function update_order_status(orderId, status, payment_date = null) {
     const allowedStatus = ['PENDING', 'PAID', 'CANCELLED'];
 
     if (!allowedStatus.includes(status)) {
         throw new Error('Invalid status');
     }
 
-    const order = await Order.findByIdAndUpdate(orderId, { status }, { new: true });
+    const updateData = {};
+
+    if (status) {
+        updateData.status = status;
+    }
+
+    if (payment_date) {
+        updateData.dt_payment = payment_date;
+        updateData.status = 'PAID'; 
+    }
+    const order = await Order.findByIdAndUpdate(orderId, updateData , { new: true });
 
     if (!order) {
         throw new Error('Order not found');
