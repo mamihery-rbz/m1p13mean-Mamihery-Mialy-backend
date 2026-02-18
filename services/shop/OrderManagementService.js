@@ -62,10 +62,24 @@ async function update_order_detail_status(orderDetailId, status) {
     if (!allowedStatus.includes(status)) {
         throw new Error('Invalid status');
     }
+    const updatedDetail = await OrderDetail.findByIdAndUpdate(orderDetailId, { status }, { new: true });
+    const details = await OrderDetail.find({ order: updatedDetail.order }).populate('product');
 
-    const orderDetail = await OrderDetail.findByIdAndUpdate(orderDetailId, { status }, { new: true });
+    const newTotal = await calculate_new_price_total(details);
 
-    if (!orderDetail) {
+    const updatedOrder = await Order.findByIdAndUpdate(
+        updatedDetail.order,
+        { total_price: newTotal },
+        { new: true }
+    );
+
+    console.log("New Total : "+newTotal);
+
+
+    console.log("Updated Detail : "+details);
+    console.log("Updated Order : "+updatedOrder);
+
+    if (!updatedOrder) {
         throw new Error('Order detail not found');
     }
 
@@ -73,8 +87,15 @@ async function update_order_detail_status(orderDetailId, status) {
 
     return {
         message,
-        orderDetail
+        updatedOrder
     };
+}
+
+async function calculate_new_price_total(details) {
+    const newTotal = details
+        .filter(d => d.status !== 'CANCELLED')
+        .reduce((sum, d) => sum + (d.quantity * d.price), 0);
+    return newTotal;
 }
 
 
@@ -111,6 +132,10 @@ async function update_order_status(orderId, status, payment_date = null) {
         updateData.dt_payment = payment_date;
         updateData.status = 'PAID'; 
     }
+    if (!payment_date) {
+        updateData.dt_payment = null;
+    }
+
     const order = await Order.findByIdAndUpdate(orderId, updateData , { new: true });
 
     if (!order) {

@@ -18,7 +18,7 @@ router.post('/orders', auth, async (req, res) => {
 
     const savedOrder = await order.save();
 
-    res.status(201).json(savedOrder);
+    res.status(201).json(savedOrder);   
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -71,8 +71,9 @@ router.put('/update_order_detail_status', async (req, res) => {
 
     res.json({ 
         message: updatedDetail.message, 
-        order_detail_status_updated: updatedDetail.orderDetail 
+        order_detail_status_updated: updatedDetail.updatedOrder 
     });
+    console.log("Updated Detail : "+updatedDetail);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
