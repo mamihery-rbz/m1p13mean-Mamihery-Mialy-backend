@@ -1,5 +1,7 @@
 const StockMovement = require('../../models/stock/StockMovement');
 const OrderDetail = require('../../models/orders/OrderDetail');
+const Product = require('../../models/product/Product');
+
 const mongoose = require('mongoose');
 const { get_shop_products_by_user } = require('./ShopServices');
 
@@ -9,6 +11,7 @@ async function get_product_stock(productId) {
   }
 
   const objectId = new mongoose.Types.ObjectId(productId);
+  const product = await Product.findById(productId).populate('category_product');
 
   // Stock total (entrées - sorties)
   const stockMovement = await StockMovement.aggregate([
@@ -67,6 +70,9 @@ async function get_product_stock(productId) {
   const stockAvailable = stockTotal - reservedQuantity - deliveredQuantity;
 
   return {
+    product_id: product._id,
+    product_name: product.name,
+    category: product.category_product?.name || null,
     stock_total: stockTotal,
     reserved: reservedQuantity,
     delivered: deliveredQuantity,

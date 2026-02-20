@@ -13,6 +13,17 @@ router.get('/stock/:productId', async (req, res) => {
     }
 });
 
+
+router.get('/stock/history/:productId', async (req, res) => {
+    try {
+        const history = await stockMovementService.get_product_stock_history(req.params.productId);
+        res.json(history);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+
 // Faire entree de stock
 router.post('/stock/in', async (req, res) => {
     try {

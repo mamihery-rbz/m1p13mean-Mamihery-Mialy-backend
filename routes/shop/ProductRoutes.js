@@ -58,6 +58,14 @@ router.post('/products', async (req, res) => {
 });
 
 
+router.get('/category_products', async (req, res) => {
+  try {
+    const category = await CategoryProduct.find();
+    res.json(category);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 
 router.get('/products', async (req, res) => {

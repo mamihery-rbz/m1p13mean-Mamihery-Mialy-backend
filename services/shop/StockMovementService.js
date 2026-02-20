@@ -37,7 +37,7 @@ async function stock_out(productId, quantity, description = 'Sortie de stock') {
     if (quantity <= 0) {
         throw new Error('La quantité doit être supérieure à 0');
     }
-
+    
     const currentStock = await get_product_stock(productId);
     const productToOut = await product.findById(productId);
 
@@ -53,8 +53,26 @@ async function stock_out(productId, quantity, description = 'Sortie de stock') {
 }
 
 
+async function get_product_stock_history(productId) {
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+        throw new Error('productId invalide');
+    }
+    const objectId = new mongoose.Types.ObjectId(productId);
+
+    const TheProduct = await product.findById(productId).populate('category_product');
+    const history = await StockMovement.find({ product: objectId })
+        .populate('product') 
+        .sort({ createdAt: -1 });
+
+    return {
+        TheProduct,
+        history
+    };
+}
+
 module.exports = {
   get_product_stock,
+  get_product_stock_history,
   stock_in,
   stock_out
 };
