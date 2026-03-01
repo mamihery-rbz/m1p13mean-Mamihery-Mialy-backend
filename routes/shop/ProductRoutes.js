@@ -38,6 +38,44 @@ router.post('/shop/products', auth, async (req, res) => {
 });
 
 
+router.get('/shop/products/filter', auth, async (req, res) => {
+  try {
+    const shopUser = await shopService.get_shop_by_user(req.user.id);
+
+    const { min, max, name,categories } = req.query;
+
+    const filter = {
+      shop: shopUser._id
+    };
+
+    // Filtre prix
+    if (min || max) {
+      filter.price = {};
+      if (min) filter.price.$gte = Number(min);
+      if (max) filter.price.$lte = Number(max);
+    }
+    if(name){
+      filter.name = { $regex: name, $options: 'i' };
+    }
+    // Filtre catégories 
+    if (categories) {
+      const categoryArray = categories.split(',');
+      filter.category_product = { $in: categoryArray };
+    }
+
+    const products = await Product
+      .find(filter)
+      .populate('shop')
+      .populate('category_product');
+
+    res.json(products);
+
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
+
 router.post('/products', async (req, res) => {
     try {
         const { name, price, shop, category_product } = req.body;
