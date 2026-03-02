@@ -25,7 +25,6 @@ app.use('/products_management', require('./routes/shop/ProductRoutes'));
 app.use('/stock', require('./routes/shop/StockRoutes'));
 app.use('/stat', require('./routes/shop/StatRoutes'));
 
-
-
+app.use('/shopper', require('./routes/shopper/ShopperRoutes'));
 
 app.listen(PORT, () => console.log(`Serveur démarré sur le port ${PORT}`)); 

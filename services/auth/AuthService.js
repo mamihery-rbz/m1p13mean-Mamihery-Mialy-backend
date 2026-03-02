@@ -2,6 +2,7 @@ const User = require('../../models/users/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Shop = require('../../models/shop/Shop');
+
 const JWT_SECRET = process.env.JWT_SECRET || 'wawa';
 
 async function register(userData){
