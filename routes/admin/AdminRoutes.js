@@ -915,5 +915,165 @@ router.delete('/users/:id', async (req, res) => {
   }
 });
 
+// table metadata endpoint
+router.get('/tables-metadata', async (req, res) => {
+  try {
+    const tables = [
+      {
+        name: 'Boxes',
+        icon: '📦',
+        model: Box,
+        fields: await Box.schema.obj,
+      },
+      {
+        name: 'BoxPriceHistory',
+        icon: '📈',
+        model: BoxPriceHistory,
+        fields: await BoxPriceHistory.schema.obj,
+      },
+      {
+        name: 'Orders',
+        icon: '🛒',
+        model: Order,
+        fields: await Order.schema.obj,
+      },
+      {
+        name: 'OrderDetails',
+        icon: '📋',
+        model: OrderDetail,
+        fields: await OrderDetail.schema.obj,
+      },
+      {
+        name: 'CategoryProducts',
+        icon: '🏷️',
+        model: CategoryProduct,
+        fields: await CategoryProduct.schema.obj,
+      },
+      {
+        name: 'Products',
+        icon: '📦',
+        model: Product,
+        fields: await Product.schema.obj,
+      },
+      {
+        name: 'ProductPriceHistory',
+        icon: '📈',
+        model: ProductPriceHistory,
+        fields: await ProductPriceHistory.schema.obj,
+      },
+      {
+        name: 'Shops',
+        icon: '🏪',
+        model: Shop,
+        fields: await Shop.schema.obj,
+      },
+      {
+        name: 'PaymentHistories',
+        icon: '💳',
+        model: PaymentHistory,
+        fields: await PaymentHistory.schema.obj,
+      },
+      {
+        name: 'StockMovements',
+        icon: '📊',
+        model: StockMovement,
+        fields: await StockMovement.schema.obj,
+      },
+      {
+        name: 'Users',
+        icon: '👤',
+        model: User,
+        fields: await User.schema.obj,
+      },
+    ];
+
+    res.json(tables);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.get('/tables-metadata', async (req, res) => {
+  try {
+    const tables = [
+      {
+        name: 'Boîtes',
+        icon: '📦',
+        fields: [
+          { name: 'id', type: 'number' },
+          { name: 'étage', type: 'number' },
+          { name: 'taille', type: 'text' },
+          { name: 'prix', type: 'number' },
+        ],
+      },
+      {
+        name: 'Boutiques',
+        icon: '🏪',
+        fields: [
+          { name: 'id', type: 'number' },
+          { name: 'nom', type: 'text' },
+          { name: 'description', type: 'text' },
+          { name: 'boîte', type: 'text' },
+        ],
+      },
+      {
+        name: 'Produits',
+        icon: '📦',
+        fields: [
+          { name: 'id', type: 'number' },
+          { name: 'nom', type: 'text' },
+          { name: 'prix', type: 'number' },
+          { name: 'boutique', type: 'text' },
+          { name: 'catégorie', type: 'text' },
+        ],
+      },
+      {
+        name: 'Commandes',
+        icon: '🛒',
+        fields: [
+          { name: 'id', type: 'number' },
+          { name: 'utilisateur', type: 'text' },
+          { name: 'prix total', type: 'number' },
+          { name: 'date paiement', type: 'date' },
+          { name: 'statut', type: 'text' },
+        ],
+      },
+      {
+        name: 'Paiements',
+        icon: '💳',
+        fields: [
+          { name: 'id', type: 'number' },
+          { name: 'boutique', type: 'text' },
+          { name: 'date paiement', type: 'date' },
+        ],
+      },
+      {
+        name: 'Mouvements Stock',
+        icon: '📊',
+        fields: [
+          { name: 'id', type: 'number' },
+          { name: 'produit', type: 'text' },
+          { name: 'entrée', type: 'number' },
+          { name: 'sortie', type: 'number' },
+          { name: 'date', type: 'date' },
+        ],
+      },
+      {
+        name: 'Utilisateurs',
+        icon: '🔑',
+        fields: [
+          { name: 'id', type: 'number' },
+          { name: 'nom', type: 'text' },
+          { name: 'email', type: 'email' },
+          { name: 'rôle', type: 'text' },
+        ],
+      },
+    ];
+
+    res.json(tables);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router;
