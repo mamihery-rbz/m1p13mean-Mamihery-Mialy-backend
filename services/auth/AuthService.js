@@ -1,7 +1,7 @@
 const User = require('../../models/users/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const Shop = require('../../models/shop/Shop');
 const JWT_SECRET = process.env.JWT_SECRET || 'wawa';
 
 async function register(userData){
@@ -27,6 +27,8 @@ async function register(userData){
 
 async function login(name, password, role){
     const user = await User.findOne({ name });
+    const shop = await Shop.findOne({ user: user?._id });
+
     if(!name || !password){
         throw new Error('All fields are required');
     }
@@ -55,7 +57,12 @@ async function login(name, password, role){
             name: user.name,
             mail: user.mail,
             role: user.role
-        }
+        },
+        shop: shop ? {
+            id: shop._id,
+            name: shop.name,
+            description: shop.description
+        } : null
     };
 }
 

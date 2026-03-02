@@ -7,11 +7,19 @@ const OrderSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  shop: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Shop',
+    required: true
+  },
   dt_order: {
     type: Date,
     default: Date.now
   },
-  dt_payment: Date,
+  dt_payment: {
+    type: Date,
+    default: null
+  },
   total_price: { type: Number, required: true },
   status: {
     type: String,
