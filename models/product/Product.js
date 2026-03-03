@@ -16,7 +16,7 @@ const ProductSchema = new mongoose.Schema({
   },
   category_product: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'CategoryProduct',
+    ref: 'category_product',
     required: true
   }
 }, { timestamps: true });
