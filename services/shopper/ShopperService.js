@@ -8,14 +8,14 @@ async function listShops() {
 }
 
 async function listProductsByShop(shopId) {
-  return Product.find({ shop: shopId });
+  return Product.find({ shop: shopId }).populate('category_product');
 }
 
 async function getUserOrders(userId) {
   if (!userId) {
     throw new Error('userId is required');
   }
-  return Order.find({ user: userId });
+  return Order.find({ user: userId }).populate('shop');
 }
 
 async function createOrder(userId, shopId, items = []) {

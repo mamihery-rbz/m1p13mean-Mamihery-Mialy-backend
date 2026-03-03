@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const shopperService = require('../../services/shopper/ShopperService');
 const auth = require('../../middlewares/auth/authMiddleware');
+const Order = require('../../models/orders/Order');
 
 // return all shops
 router.get('/shops', async (req, res) => {
@@ -41,6 +42,15 @@ router.post('/orders', auth, async (req, res) => {
     const { shopId, items } = req.body;
     const result = await shopperService.createOrder(userId, shopId, items);
     res.status(201).json(result);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.delete('/orders/:orderId', auth, async (req, res) => {
+  try {
+    const result = await Order.findByIdAndDelete(req.params.orderId);
+    res.json({ success: 'Commande supprimée avec succès', order: result });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
